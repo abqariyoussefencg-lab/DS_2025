@@ -7,6 +7,9 @@
 **Auteur :** Analyse économique comparative  
 **Sources :** FMI, Banque Mondiale, Statista  
 **Période d'étude :** Année 2024
+
+
+
 Youssef ABQARI
 <img src="Me.jpg" style="height:464px;margin-right:432px"/>
 <img src="téléchargement.jpeg" style="height:464px;margin-right:432px"/>
