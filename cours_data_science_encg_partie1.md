@@ -274,7 +274,7 @@ axes[0, 0].set_xlabel('Valeur')
 axes[0, 0].set_ylabel('Fréquence')
 
 
-<img src="Graphe.png" style="height:464px;margin-right:432px"/>
+<img src="Graphe.jpg" style="height:464px;margin-right:432px"/>
 
 
 # Ajouter la moyenne et la médiane
