@@ -271,6 +271,10 @@ axes[0, 0].set_title('Distribution des valeurs', fontsize=14, fontweight='bold')
 axes[0, 0].set_xlabel('Valeur')
 axes[0, 0].set_ylabel('Fréquence')
 
+
+<img src="Graphe.png" style="height:464px;margin-right:432px"/>
+
+
 # Ajouter la moyenne et la médiane
 axes[0, 0].axvline(colonne.mean(), color='red', linestyle='--', 
                    label=f'Moyenne: {colonne.mean():.2f}')
