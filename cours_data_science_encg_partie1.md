@@ -180,6 +180,26 @@ import seaborn as sns
 url = "https://raw.githubusercontent.com/datasets/gdp/master/data/gdp.csv"
 df = pd.read_csv(url)
 
+''' Ce dataset contient les données annuelles du Produit Intérieur Brut (PIB) exprimées en dollars américains courants (USD) pour la plupart des pays du monde, ainsi que pour certaines régions et le monde entier.
+
+Il provient des comptes nationaux de la Banque mondiale (World Bank) et de l’OCDE (OECD). Chaque enregistrement correspond à une combinaison unique de pays, année et valeur du PIB.
+
+Le fichier CSV comporte généralement les colonnes suivantes :
+
+Country Name : le nom du pays ou de la région.
+
+Country Code : le code ISO 3 du pays.
+
+Year : l’année de référence.
+
+Value : le PIB correspondant, en dollars américains courants.
+
+Ce jeu de données permet d’analyser l’évolution économique mondiale sur plusieurs décennies, de comparer les niveaux de PIB entre pays ou régions, et de suivre la croissance économique dans le temps.
+
+En résumé :
+
+Le dataset “GDP” contient les valeurs annuelles du PIB en dollars US courants pour tous les pays du monde, issues des données officielles de la Banque mondiale et de l’OCDE, couvrant plusieurs décennies d’observations économiques. '''
+
 # Afficher les premières lignes
 print(df.head())
 
