@@ -1,45 +1,41 @@
-Rapport d'Analyse : Performances des Étudiants (Student Performance UCI)
-Objectif : Ce rapport analyse le jeu de données "Student Performance" de l'UCI pour comprendre les facteurs influençant les résultats scolaires (notes finales) des étudiants.
+# Rapport d'Analyse : Performances des Étudiants (Student Performance UCI)
 
-1. Description de la Base de Données
-Informations du référentiel UCI
-Source : UCI Machine Learning Repository, Dataset 320
+**Objectif :** Ce rapport analyse le jeu de données "Student Performance" de l'UCI pour comprendre les facteurs influençant les résultats scolaires (notes finales) des étudiants.
 
-Contexte : Ces données concernent les résultats des élèves de l'enseignement secondaire dans deux écoles portugaises.
+## 1. Description de la Base de Données
 
-Fichiers : Les données sont chargées via la bibliothèque ucimlrepo. Cette méthode récupère et combine les deux ensembles de données ('Mathématiques' et 'Langue Portugaise'), qui totalisent 1044 entrées. Les 32 premières colonnes (comme age, studytime, G1, G2) sont chargées comme "features" (X) et la note finale (G3) est chargée comme "target" (y).
+### Informations du référentiel UCI
 
-Analyse : Pour ce rapport, nous re-combinons les features (X) et la cible (y) en un seul DataFrame afin d'analyser leurs relations. Cette analyse porte sur l'ensemble de ces 1044 données combinées.
+* **Source :** [UCI Machine Learning Repository, Dataset 320](https://archive.ics.uci.edu/dataset/320/student+performance)
+* **Contexte :** Ces données concernent les résultats des élèves de l'enseignement secondaire dans deux écoles portugaises.
+* **Fichiers :** Les données sont chargées via la bibliothèque `ucimlrepo`. Cette méthode récupère et combine les deux ensembles de données ('Mathématiques' et 'Langue Portugaise'), qui totalisent **1044 entrées**. Les 32 premières colonnes (comme `age`, `studytime`, `G1`, `G2`) sont chargées comme "features" (X) et la note finale (`G3`) est chargée comme "target" (y).
+* **Analyse :** Pour ce rapport, nous re-combinons les features (X) et la cible (y) en un seul DataFrame afin d'analyser leurs relations. **Cette analyse porte sur l'ensemble de ces 1044 données combinées.**
 
-Informations Externes (Usages courants)
-Ce jeu de données est très populaire dans la communauté de la data science et du machine learning. Il est le plus souvent utilisé pour :
+### Informations Externes (Usages courants)
 
-La Régression : Prédire la note finale exacte (G3) en fonction des autres variables.
+Ce jeu de données est très populaire dans la communauté de la *data science* et du *machine learning*. Il est le plus souvent utilisé pour :
 
-La Classification : Prédire si un étudiant va réussir (par exemple, G3 >= 10) ou échouer (G3 < 10).
+1.  **La Régression :** Prédire la note finale exacte (`G3`) en fonction des autres variables.
+2.  **La Classification :** Prédire si un étudiant va *réussir* (par exemple, `G3 >= 10`) ou *échouer* (`G3 < 10`).
+3.  **L'Analyse de Facteurs :** Comprendre quels facteurs, notamment sociaux (comme `Dalc` - consommation d'alcool en semaine, ou `goout` - sorties), ont le plus d'impact sur la réussite scolaire.
 
-L'Analyse de Facteurs : Comprendre quels facteurs, notamment sociaux (comme Dalc - consommation d'alcool en semaine, ou goout - sorties), ont le plus d'impact sur la réussite scolaire.
+---
 
-2. Code Python et Analyse Exploratoire
+## 2. Code Python et Analyse Exploratoire
+
 Ce code est conçu pour être exécuté dans des cellules Google Colab.
 
-2.1. Importation des Bibliothèques et Chargement des Données (via ucimlrepo)
-Explication du code :
+### 2.1. Importation des Bibliothèques et Chargement des Données (via `ucimlrepo`)
 
-On importe pandas, matplotlib, seaborn et numpy.
+**Explication du code :**
+1.  On importe `pandas`, `matplotlib`, `seaborn` et `numpy`.
+2.  On installe la bibliothèque `ucimlrepo` nécessaire pour charger les données depuis le référentiel UCI.
+3.  On utilise `fetch_ucirepo(id=320)` pour récupérer le jeu de données.
+4.  La bibliothèque sépare intelligemment les données en `features` (X) et `targets` (y, qui contient `G3`).
+5.  On affiche les métadonnées et les variables pour comprendre la structure.
+6.  On utilise `pd.concat` pour **re-combiner X et y en un seul DataFrame `df`**, ce qui est nécessaire pour notre analyse exploratoire (par ex., calculer la corrélation entre `G1` et `G3`).
 
-On installe la bibliothèque ucimlrepo nécessaire pour charger les données depuis le référentiel UCI.
-
-On utilise fetch_ucirepo(id=320) pour récupérer le jeu de données.
-
-La bibliothèque sépare intelligemment les données en features (X) et targets (y, qui contient G3).
-
-On affiche les métadonnées et les variables pour comprendre la structure.
-
-On utilise pd.concat pour re-combiner X et y en un seul DataFrame df, ce qui est nécessaire pour notre analyse exploratoire (par ex., calculer la corrélation entre G1 et G3).
-
-Python
-
+```python
 # Étape 1 : Importer les bibliothèques
 import pandas as pd
 import matplotlib.pyplot as plt
