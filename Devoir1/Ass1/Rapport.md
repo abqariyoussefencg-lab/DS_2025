@@ -1,285 +1,123 @@
-# Rapport d'Analyse : Performances des Étudiants (Student Performance UCI)
+Description du Dataset : Student Performance (UCI)
+👨‍🔬 Qui ? (Les Auteurs)
+Les données ont été collectées et préparées par le Dr. Paulo Cortez et Mme. Alice Silva. Ils sont tous deux chercheurs au Département des Systèmes d'Information de l'Université du Minho, située à Guimarães, au Portugal. Paulo Cortez est un chercheur bien connu dans le domaine du data mining et de l'apprentissage automatique (machine learning).
+📅 Quand ? (La Période)
 
-**Objectif :** Ce rapport analyse le jeu de données "Student Performance" de l'UCI pour comprendre les facteurs influençant les résultats scolaires (notes finales) des étudiants.
+Collecte des données : Les données ont été recueillies au cours de l'année scolaire 2005-2006.
+Publication du dataset : Le dataset et l'article de recherche associé ont été publiés en 2008.
 
-## 1. Description de la Base de Données
+🎯 Pourquoi ? (L'Objectif Initial)
+L'objectif principal des auteurs n'était pas seulement de collecter des données, mais de prouver que l'on pouvait utiliser des techniques de data mining (exploration de données) pour prédire la réussite ou l'échec scolaire. Leur but ultime était de créer un système capable d'identifier tôt les étudiants "à risque" (ceux susceptibles d'échouer) afin que l'école puisse intervenir et leur proposer un soutien pédagogique avant qu'il ne soit trop tard.
+Ils voulaient répondre à des questions comme :
 
-### Informations du référentiel UCI
+Les notes passées (G1, G2) sont-elles les seuls bons prédicteurs de la note finale (G3) ?
+Quel est l'impact réel des facteurs sociaux (sorties, consommation d'alcool, temps d'étude, soutien familial) sur les notes ?
+Peut-on prédire un échec (G3 < 10) en se basant uniquement sur des données démographiques et sociales, sans même connaître les premières notes ?
 
-* **Source :** [UCI Machine Learning Repository, Dataset 320](https://archive.ics.uci.edu/dataset/320/student+performance)
-* **Contexte :** Ces données concernent les résultats des élèves de l'enseignement secondaire dans deux écoles portugaises.
-* **Fichiers :** Les données sont chargées via la bibliothèque `ucimlrepo`. Cette méthode récupère et combine les deux ensembles de données ('Mathématiques' et 'Langue Portugaise'), qui totalisent **1044 entrées**. Les 32 premières colonnes (comme `age`, `studytime`, `G1`, `G2`) sont chargées comme "features" (X) et la note finale (`G3`) est chargée comme "target" (y).
-* **Analyse :** Pour ce rapport, nous re-combinons les features (X) et la cible (y) en un seul DataFrame afin d'analyser leurs relations. **Cette analyse porte sur l'ensemble de ces 1044 données combinées.**
+🌍 Où et Comment ? (Le Contexte de la Collecte)
 
-### Informations Externes (Usages courants)
+Où : Les données proviennent de deux écoles secondaires publiques de la région du Minho au Portugal. Les écoles sont identifiées par "GP" (Gabriel Pereira) et "MS" (Mousinho da Silveira).
+Comment : La collecte s'est faite par deux moyens :
 
-Ce jeu de données est très populaire dans la communauté de la *data science* et du *machine learning*. Il est le plus souvent utilisé pour :
+Questionnaires : Les étudiants ont rempli des questionnaires pour fournir les données démographiques, sociales et liées à leur mode de vie (ex: studytime, goout, Dalc, Walc, famsup, etc.).
+Registres scolaires : Les données objectives comme les notes (G1, G2, G3), les absences (absences) et les échecs passés (failures) ont été extraites des bases de données de l'école.
 
-1.  **La Régression :** Prédire la note finale exacte (`G3`) en fonction des autres variables.
-2.  **La Classification :** Prédire si un étudiant va *réussir* (par exemple, `G3 >= 10`) ou *échouer* (`G3 < 10`).
-3.  **L'Analyse de Facteurs :** Comprendre quels facteurs, notamment sociaux (comme `Dalc` - consommation d'alcool en semaine, ou `goout` - sorties), ont le plus d'impact sur la réussite scolaire.
 
----
+Les deux fichiers : Les auteurs ont collecté ces informations pour deux matières fondamentales : les Mathématiques (student-mat.csv) et la Langue Portugaise (student-por.csv). C'est pour cela que la bibliothèque ucimlrepo les combine (donnant 1044 lignes au lieu de 395 ou 649).
 
-## 2. Code Python et Analyse Exploratoire
+En résumé, ce n'est pas juste un "fichier Excel" ; c'est le résultat d'un projet de recherche de 2008 visant à appliquer le machine learning à l'éducation (un domaine maintenant appelé Educational Data Mining ou EDM).
 
-Ce code est conçu pour être exécuté dans des cellules Google Colab.
+📊 Informations du Référentiel UCI
 
-### 2.1. Importation des Bibliothèques et Chargement des Données (via `ucimlrepo`)
+Source : UCI Machine Learning Repository, Dataset 320
+Contexte : Ces données concernent les résultats des élèves de l'enseignement secondaire dans deux écoles portugaises.
+Nombre d'entrées : 1044 étudiants (combinaison des deux matières)
+Nombre de variables : 33 colonnes au total (32 features + 1 target)
+Valeurs manquantes : Aucune - la base de données est complète
 
-**Explication du code :**
-1.  On importe `pandas`, `matplotlib`, `seaborn` et `numpy`.
-2.  On installe la bibliothèque `ucimlrepo` nécessaire pour charger les données depuis le référentiel UCI.
-3.  On utilise `fetch_ucirepo(id=320)` pour récupérer le jeu de données.
-4.  La bibliothèque sépare intelligemment les données en `features` (X) et `targets` (y, qui contient `G3`).
-5.  On affiche les métadonnées et les variables pour comprendre la structure.
-6.  On utilise `pd.concat` pour **re-combiner X et y en un seul DataFrame `df`**, ce qui est nécessaire pour notre analyse exploratoire (par ex., calculer la corrélation entre `G1` et `G3`).
 
-```python
-# Étape 1 : Importer les bibliothèques
-import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
-import numpy as np
+📋 Description des Variables
+Variables Démographiques
 
-# Configurer Seaborn pour un affichage plus joli
-sns.set(style="whitegrid")
+school : École de l'étudiant (binaire : "GP" - Gabriel Pereira ou "MS" - Mousinho da Silveira)
+sex : Sexe de l'étudiant (binaire : "F" - féminin ou "M" - masculin)
+age : Âge de l'étudiant (numérique : de 15 à 22 ans)
+address : Type d'adresse du domicile (binaire : "U" - urbain ou "R" - rural)
+famsize : Taille de la famille (binaire : "LE3" - inférieur ou égal à 3 ou "GT3" - supérieur à 3)
+Pstatus : Statut de cohabitation des parents (binaire : "T" - vivant ensemble ou "A" - séparés)
 
-# Étape 2 : Installer la bibliothèque ucimlrepo
-!pip install ucimlrepo -q
+Variables Familiales et Éducatives
 
-# Étape 3 : Charger les données avec ucimlrepo
-from ucimlrepo import fetch_ucirepo
+Medu : Niveau d'éducation de la mère (numérique : 0 - aucun, 1 - primaire (4ème année), 2 - 5ème à 9ème année, 3 - secondaire ou 4 - supérieur)
+Fedu : Niveau d'éducation du père (numérique : même échelle que Medu)
+Mjob : Profession de la mère (nominal : "teacher", "health", "services", "at_home", "other")
+Fjob : Profession du père (nominal : même catégories que Mjob)
+reason : Raison du choix de cette école (nominal : proximité du "home", "reputation" de l'école, préférence pour certains "course" ou "other")
+guardian : Tuteur légal de l'étudiant (nominal : "mother", "father" ou "other")
 
-# fetch dataset
-student_performance = fetch_ucirepo(id=320)
+Variables de Soutien et Activités
 
-# data (as pandas dataframes)
-X = student_performance.data.features
-y = student_performance.data.targets
+traveltime : Temps de trajet domicile-école (numérique : 1 - <15 min, 2 - 15 à 30 min, 3 - 30 min à 1 heure, 4 - >1 heure)
+studytime : Temps d'étude hebdomadaire (numérique : 1 - <2 heures, 2 - 2 à 5 heures, 3 - 5 à 10 heures, 4 - >10 heures)
+failures : Nombre d'échecs passés dans les classes précédentes (numérique : n si 1≤n<3, sinon 4)
+schoolsup : Soutien pédagogique supplémentaire (binaire : yes ou no)
+famsup : Soutien familial pour les études (binaire : yes ou no)
+paid : Cours particuliers payants dans la matière (binaire : yes ou no)
+activities : Activités extra-scolaires (binaire : yes ou no)
+nursery : A fréquenté l'école maternelle (binaire : yes ou no)
+higher : Souhaite poursuivre des études supérieures (binaire : yes ou no)
+internet : Accès Internet à la maison (binaire : yes ou no)
+romantic : En relation amoureuse (binaire : yes ou no)
 
-# Étape 4 : Combiner les features (X) et la cible (y) en un seul DataFrame
-df = pd.concat([X, y], axis=1)
+Variables Sociales et de Style de Vie
 
-# Étape 5 : Afficher les métadonnées et les informations sur les variables (comme demandé)
-print("--- METADATA ---")
-print(student_performance.metadata)
-print("\n--- VARIABLES ---")
-print(student_performance.variables)
+famrel : Qualité des relations familiales (numérique : de 1 - très mauvaise à 5 - excellente)
+freetime : Temps libre après l'école (numérique : de 1 - très peu à 5 - beaucoup)
+goout : Sorties avec les amis (numérique : de 1 - très peu à 5 - très élevé)
+Dalc : Consommation d'alcool en semaine (numérique : de 1 - très faible à 5 - très élevée)
+Walc : Consommation d'alcool le week-end (numérique : de 1 - très faible à 5 - très élevée)
+health : État de santé actuel (numérique : de 1 - très mauvais à 5 - très bon)
 
-# Afficher les 5 premières lignes pour vérifier
-print("\n--- APERÇU DU DATAFRAME COMBINÉ ---")
-print(df.head())
-2.2. Exploration Initiale de la Structure
-Explication du code :
+Variables de Performance Scolaire
 
-df.info() nous montre le type de chaque colonne et s'il y a des valeurs manquantes.
+absences : Nombre d'absences scolaires (numérique : de 0 à 93)
+G1 : Note du premier semestre (numérique : de 0 à 20)
+G2 : Note du deuxième semestre (numérique : de 0 à 20)
+G3 : Note finale (numérique : de 0 à 20) - Variable cible
 
-Python
 
-# Obtenir les informations générales sur le DataFrame
-print("\nInformations sur le DataFrame :")
-df.info()
-Analyse des résultats de df.info() :
+📊 Principales Conclusions de l'Article Original (2008)
+Voici les principales conclusions de l'article original "Using Data Mining to Predict Secondary School Student Performance" par P. Cortez et A. Silva.
+1. La conclusion la plus importante : Les notes passées sont reines
+La découverte la plus évidente et la plus significative des auteurs est que le meilleur prédicteur de la note finale (G3) est, de loin, la note du deuxième semestre (G2).
 
-On constate qu'il y a 1044 entrées (étudiants des deux cours, maths et portugais).
+Corrélation de +0.91 entre G2 et G3 - une corrélation extrêmement forte.
+La note G1 est également un excellent prédicteur (corrélation de +0.82).
+Implication : Pour prédire précisément si un étudiant va réussir ou échouer à la fin de l'année, la meilleure information à avoir est sa note la plus récente. Un étudiant qui s'en sort bien à G2 s'en sortira presque certainement bien à G3.
 
-Il y a 33 colonnes au total (32 features + 1 target G3).
+2. Prédire l'échec sans les notes passées
+Le défi le plus intéressant pour les auteurs était : peut-on prédire l'échec d'un étudiant tôt dans l'année, avant même d'avoir les notes G1 ou G2 ?
+Ils ont donc entraîné des modèles en ignorant délibérément les notes G1, G2 et G3 et en essayant de prédire un échec (failures > 0). Dans ce scénario, de nouveaux facteurs sont devenus les plus importants.
+3. Les 5 facteurs sociaux et comportementaux les plus influents
+En dehors des notes, les auteurs ont identifié plusieurs autres facteurs qui avaient un impact notable sur les performances :
 
-Point important : Il n'y a aucune valeur manquante (non-null) dans ce jeu de données.
+failures (Échecs passés) : C'est le facteur négatif le plus puissant. Un étudiant qui a déjà échoué à des cours dans le passé est massivement plus susceptible d'échouer à nouveau.
+higher (Veut aller à l'université) : L'ambition personnelle était un prédicteur positif très fort. Les étudiants qui ont répondu "oui" (yes) à vouloir poursuivre des études supérieures avaient tendance à avoir de bien meilleures notes, indépendamment d'autres facteurs.
+Medu & Fedu (Éducation des parents) : Le niveau d'éducation de la mère (Medu) et du père (Fedu) était un indicateur important. Des parents ayant un niveau d'études supérieur étaient corrélés à de meilleurs résultats pour l'étudiant.
+school (L'école) : L'école fréquentée (GP ou MS) avait un impact notable, suggérant qu'une école était globalement plus performante que l'autre.
+goout (Sorties avec les amis) : Un niveau élevé de sorties (goout = 4 ou 5) était fortement corrélé à de moins bonnes notes.
 
-2.3. Analyse Statistique Détaillée (Mode, Médiane, Quartiles, etc.)
-Explication du code : Nous allons maintenant calculer et afficher explicitement les principales statistiques descriptives pour les variables numériques clés : G3 (note finale), absences, et age.
+Mention spéciale : La consommation d'alcool (Dalc et Walc) était également identifiée comme un facteur négatif, tout comme le temps de trajet (traveltime).
+Résumé des conclusions
+Les auteurs ont réussi leur objectif. Ils ont prouvé que :
 
-Mesures de tendance centrale : Moyenne, Médiane, Mode.
+La réussite scolaire est fortement auto-corrélée (les bonnes notes amènent les bonnes notes).
+En l'absence de notes, une combinaison de facteurs comportementaux (failures, higher, goout) et socio-démographiques (Medu, school) peut créer un modèle de machine learning (type Arbre de Décision ou SVM) capable d'identifier les étudiants "à risque" avec une bonne précision.
 
-Mesures de dispersion : Écart-type, Variance, Étendue (Min/Max), Étendue Interquartile (IQR).
 
-Mesures de position : Quartiles (Q1, Q3).
+🎓 Usages Courants du Dataset
+Ce jeu de données est très populaire dans la communauté de la data science et du machine learning. Il est le plus souvent utilisé pour :
 
-Mesures de forme : Skewness (asymétrie) et Kurtosis (aplatissement).
-
-Python
-
-# --- Début du bloc de code pour l'analyse statistique détaillée ---
-
-print("===============================================")
-print("=== ANALYSE STATISTIQUE DÉTAILLÉE (PYTHON) ===")
-print("===============================================")
-
-# --- Analyse de la variable cible 'G3' (Note Finale) ---
-print("\n--- Statistiques pour 'G3' (Note Finale) ---")
-
-# Tendance centrale
-mean_g3 = df['G3'].mean()
-median_g3 = df['G3'].median()
-mode_g3 = df['G3'].mode()[0]  # .mode() renvoie une série, [0] prend la première valeur (le mode)
-
-print(f"  Moyenne   : {mean_g3:.2f}")
-print(f"  Médiane   : {median_g3}")
-print(f"  Mode      : {mode_g3}")
-
-# Dispersion et Position
-std_g3 = df['G3'].std()
-var_g3 = df['G3'].var()
-min_g3 = df['G3'].min()
-max_g3 = df['G3'].max()
-range_g3 = max_g3 - min_g3
-q1_g3 = df['G3'].quantile(0.25)
-q3_g3 = df['G3'].quantile(0.75)
-iqr_g3 = q3_g3 - q1_g3
-
-print(f"\n  Écart-type: {std_g3:.2f}")
-print(f"  Variance  : {var_g3:.2f}")
-print(f"\n  Minimum   : {min_g3}")
-print(f"  Maximum   : {max_g3}")
-print(f"  Étendue (Range) : {range_g3}")
-print(f"  Quartile 1 (Q1 - 25%) : {q1_g3}")
-print(f"  Quartile 3 (Q3 - 75%) : {q3_g3}")
-print(f"  Étendue Interquartile (IQR) : {iqr_g3}")
-
-# Forme de la distribution
-skew_g3 = df['G3'].skew()
-kurt_g3 = df['G3'].kurt()
-
-print(f"\n  Asymétrie (Skewness) : {skew_g3:.2f}")
-print(f"  Aplatissement (Kurtosis) : {kurt_g3:.2f}")
-
-# --- Analyse de la variable 'absences' ---
-print("\n--- Statistiques pour 'absences' ---")
-
-mean_abs = df['absences'].mean()
-median_abs = df['absences'].median()
-mode_abs = df['absences'].mode()[0]
-std_abs = df['absences'].std()
-max_abs = df['absences'].max()
-q1_abs = df['absences'].quantile(0.25)
-q3_abs = df['absences'].quantile(0.75)
-skew_abs = df['absences'].skew()
-
-print(f"  Moyenne   : {mean_abs:.2f}")
-print(f"  Médiane   : {median_abs}")
-print(f"  Mode      : {mode_abs}")
-print(f"  Écart-type: {std_abs:.2f}")
-print(f"  Maximum   : {max_abs}")
-print(f"  Quartile 1 (Q1 - 25%): {q1_abs}")
-print(f"  Quartile 3 (Q3 - 75%): {q3_abs}")
-print(f"  Asymétrie (Skewness) : {skew_abs:.2f} (Note: très asymétrique)")
-
-
-# --- Analyse de la variable 'age' ---
-print("\n--- Statistiques pour 'age' ---")
-print(f"  Moyenne   : {df['age'].mean():.2f}")
-print(f"  Médiane   : {df['age'].median()}")
-print(f"  Mode      : {df['age'].mode()[0]}")
-print(f"  Minimum   : {df['age'].min()}")
-print(f"  Maximum   : {df['age'].max()}")
-
-
-# --- BONUS : Résumé 'describe()' transposé (plus lisible) ---
-print("\n===============================================")
-print("=== RÉSUMÉ 'DESCRIBE' (TRANSPOSÉ) ===")
-print("===============================================")
-# .T transpose le tableau (les colonnes deviennent des lignes) pour une meilleure lisibilité
-print(df.describe().T)
-
-# --- Fin du bloc de code ---
-Analyse des résultats statistiques (Exemple pour 'G3') :
-
-Moyenne vs Médiane : Comparez la moyenne et la médiane. Si la moyenne est inférieure à la médiane, cela suggère une asymétrie à gauche (tirée vers le bas par de faibles notes, comme 0).
-
-Asymétrie (Skewness) : Une valeur négative confirme l'asymétrie à gauche.
-
-Étendue Interquartile (IQR) : 50% des étudiants (le "milieu" de la classe) ont des notes comprises entre Q1 et Q3.
-
-Statistiques 'absences' : Notez la grande différence entre la moyenne, la médiane (probablement basse) et le maximum (probablement élevé). L'asymétrie sera fortement positive, indiquant que la plupart des étudiants ont peu d'absences, mais quelques-uns en ont énormément.
-
-2.4. Visualisations (Graphiques)
-Ici, nous créons plusieurs types de graphiques pour explorer visuellement les données.
-
-A. Histogramme : Distribution des notes finales (G3)
-Explication : Un histogramme nous montre la répartition des étudiants en fonction de leur note finale. Le kde=True ajoute une ligne lissée (estimation de la densité).
-
-Python
-
-plt.figure(figsize=(10, 6))
-sns.histplot(df['G3'], bins=20, kde=True, color='blue')
-plt.title('Distribution des Notes Finales (G3) - Maths et Portugais Combinés')
-plt.xlabel('Note Finale (sur 20)')
-plt.ylabel('Nombre d\'Étudiants')
-plt.show()
-Analyse du graphique : La distribution montre un pic notable à 10 et un autre pic à 0, indiquant un nombre non négligeable d'étudiants en échec sévère.
-
-B. Boîte à Moustaches (Box Plot) : Note finale (G3) vs Temps d'étude (studytime)
-Explication : La boîte à moustaches est parfaite pour comparer la distribution d'une variable numérique (G3) à travers différentes catégories (studytime).
-
-Python
-
-# Mapper les chiffres en labels plus clairs pour le graphique
-studytime_labels = {1: '< 2h', 2: '2-5h', 3: '5-10h', 4: '> 10h'}
-df['studytime_label'] = df['studytime'].map(studytime_labels)
-
-plt.figure(figsize=(10, 6))
-sns.boxplot(x='studytime_label', y='G3', data=df, order=['< 2h', '2-5h', '5-10h', '> 10h'])
-plt.title('Note Finale (G3) en fonction du Temps d\'Étude Hebdomadaire')
-plt.xlabel('Temps d\'étude')
-plt.ylabel('Note Finale (sur 20)')
-plt.show()
-Analyse du graphique : On observe une légère tendance : la médiane des notes augmente avec le temps d'étude, particulièrement pour ceux qui étudient plus de 10 heures.
-
-C. Nuage de Points (Scatter Plot) : Corrélation G1 vs G3
-Explication : Ce graphique est idéal pour voir la relation entre deux variables numériques. Nous nous attendons à une forte corrélation positive : un étudiant qui a bien réussi au premier semestre (G1) devrait aussi bien réussir à l'examen final (G3).
-
-Python
-
-plt.figure(figsize=(10, 6))
-sns.scatterplot(x='G1', y='G3', data=df, alpha=0.6)
-plt.title('Relation entre la Note du Premier Semestre (G1) et la Note Finale (G3)')
-plt.xlabel('Note G1')
-plt.ylabel('Note G3')
-plt.show()
-Analyse du graphique : Comme attendu, la corrélation est très forte et positive. Les points forment une ligne ascendante claire, indiquant que G1 est un excellent prédicteur de G3.
-
-D. Diagramme en Bâtons (Bar Plot) : Impact des échecs passés
-Explication : Un diagramme en bâtons montre comment la moyenne de G3 change en fonction du nombre d'échecs passés (failures).
-
-Python
-
-plt.figure(figsize=(10, 6))
-sns.barplot(x='failures', y='G3', data=df)
-plt.title('Note Finale Moyenne en fonction du Nombre d\'Échecs Passés')
-plt.xlabel('Nombre d\'échecs passés')
-plt.ylabel('Note Finale Moyenne (G3)')
-plt.show()
-Analyse du graphique : L'impact est très net. La note finale moyenne chute drastiquement avec chaque échec passé.
-
-E. Matrice de Corrélation (Heatmap)
-Explication : Une heatmap (carte de chaleur) est un moyen puissant de visualiser la corrélation entre toutes les variables numériques en même temps. Une couleur chaude (rouge) signifie une forte corrélation positive, et une couleur froide (bleu) une forte corrélation négative.
-
-Python
-
-# Sélectionner uniquement les colonnes numériques pertinentes pour la corrélation
-# (G3 est déjà dans df, pas besoin de sélectionner X seulement)
-numeric_cols = df.select_dtypes(include=[np.number])
-
-plt.figure(figsize=(14, 11))
-sns.heatmap(numeric_cols.corr(), annot=True, fmt='.2f', cmap='coolwarm', annot_kws={"size": 8})
-plt.title('Matrice de Corrélation des Variables Numériques')
-plt.tight_layout() # Ajuste le graphique pour éviter les superpositions
-plt.show()
-Analyse du graphique :
-
-Fortes corrélations positives : G1 et G2 sont très fortement corrélés avec G3 (0.82 et 0.91), ce qui est logique. Medu (éducation de la mère) et Fedu (éducation du père) sont aussi corrélées entre elles.
-
-Fortes corrélations négatives : failures (échecs) est fortement corrélée négativement avec toutes les notes (G1, G2, G3).
-
-3. Conclusion de l'Analyse
-Cette analyse exploratoire de la base de données combinée (Maths et Portugais) révèle plusieurs points clés :
-
-Prévisibilité des Notes : Les notes finales (G3) sont très fortement prédites par les notes précédentes (G1 et G2), avec des coefficients de corrélation supérieurs à 0.8.
-
-Impact des Échecs : Le nombre d'échecs passés (failures) est le prédicteur négatif le plus puissant de la réussite future.
-
-Facteurs Sociaux : Le temps d'étude (studytime) montre une corrélation positive modeste mais claire avec les notes.
-
-Qualité des Données : La base de données est complète et ne contient aucune valeur manquante, la rendant idéale pour des modèles de machine learning.
+La Régression : Prédire la note finale exacte (G3) en fonction des autres variables.
+La Classification : Prédire si un étudiant va réussir (par exemple, G3 >= 10) ou échouer (G3 < 10).
+L'Analyse de Facteurs : Comprendre quels facteurs, notamment sociaux (comme Dalc - consommation d'alcool en semaine, ou goout - sorties), ont le plus d'impact sur la réussite scolaire.
