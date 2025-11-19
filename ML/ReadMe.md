@@ -1,5 +1,8 @@
 # Analyse de la Base de Données Wine Quality
 Fait par : Youssef ABQARI 
+<img src="Me.jpg" style="height:464px;margin-right:432px"/>
+
+<img src="téléchargement.jpeg" style="height:464px;margin-right:432px"/>
 ## 📊 Description de la Base de Données
 
 ### Informations Générales
