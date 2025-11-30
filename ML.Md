@@ -179,7 +179,7 @@ Conclusion Technique
 L'application de la normalisation (StandardScaler) permet au modèle KNN de prendre en compte toutes les variables équitablement, augmentant significativement la précision de la prédiction. La validation croisée confirme que le modèle est robuste et généralisable à de nouveaux étudiants.
 
 
-​📝 3. Explication Détaillée du Code
+## ​📝 3. Explication Détaillée du Code
 ​Le script est structuré en 7 étapes logiques pour transformer les données brutes en un modèle fiable.
 ​Étape 1 : Importation et Configuration
 ​Nous importons kagglehub pour l'accès aux données, pandas pour la manipulation, et sklearn pour le Machine Learning. La ligne sns.set_theme garantit que les graphiques générés seront esthétiques et lisibles.
