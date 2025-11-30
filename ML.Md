@@ -150,3 +150,35 @@ print(f"Accuracy Moyenne CV : {cv_scores.mean():.4f} (+/- {cv_scores.std():.4f})
 final_model.fit(Xa_sc, Ya)
 acc_test = accuracy_score(Yt, final_model.predict(Xt_sc))
 print(f"\n=== Accuracy Finale sur Test Set : {acc_test:.4f} ===")
+
+## 📝 3. Explication Détaillée du Code
+
+Le script est structuré en 7 étapes logiques pour transformer les données brutes en un modèle fiable.
+
+### Étape 1 : Importation et Configuration
+Nous importons `kagglehub` pour l'accès aux données, `pandas` pour la manipulation, et `sklearn` pour le Machine Learning. La ligne `sns.set_theme` garantit que les graphiques générés seront esthétiques et lisibles.
+
+### Étape 2 : Chargement Dynamique
+Plutôt que d'utiliser un nom de fichier fixe (qui change souvent sur Kaggle), le script télécharge la dernière version du dataset, scanne le dossier téléchargé et charge automatiquement le premier fichier `.csv` trouvé.
+
+### Étape 3 : Préparation (Preprocessing)
+Les algorithmes comme KNN ne peuvent pas traiter directement du texte ou des échelles très différentes.
+* **Binarisation de la cible** : La note finale est convertie en 0 ou 1 (Seuil à 50/100). Cela transforme le problème de régression (prédire un chiffre) en classification (Réussite vs Échec).
+* **Label Encoding** : Les colonnes textuelles (ex: "Male", "Female") sont converties en chiffres (0, 1).
+
+### Étape 4 : Division des Données (Splitting)
+Pour éviter la triche (*data leakage*), nous divisons les données en trois :
+1.  **Train** : Pour l'apprentissage.
+2.  **Validation** : Pour le réglage des hyperparamètres (trouver le meilleur *k*).
+3.  **Test** : Gardé secret jusqu'à la fin pour évaluer la performance réelle.
+
+### Étape 5 : KNN Sans Normalisation
+Nous testons l'algorithme sur les données brutes pour établir une "baseline" (référence). Une boucle teste toutes les valeurs impaires de *k* (1 à 29).
+
+### Étape 6 : KNN Avec Normalisation
+C'est l'étape cruciale. Les variables ont des échelles différentes (l'Assiduité va de 0 à 100, les Heures d'étude de 0 à 20).
+* Sans normalisation, l'Assiduité écraserait les autres variables dans le calcul de distance euclidienne.
+* `StandardScaler` ramène tout sur la même échelle (moyenne 0, écart-type 1), rendant la comparaison équitable.
+
+### Étape 7 : Validation Croisée
+Pour vérifier que nos résultats ne sont pas dus à un "coup de chance" sur la découpe des données, nous utilisons la **Cross-Validation**. Le modèle est entraîné et testé 5 fois sur des parties différentes. La moyenne de ces scores est l'indicateur le plus fiable de la qualité du modèle.
