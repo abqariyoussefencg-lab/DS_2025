@@ -151,7 +151,7 @@ final_model.fit(Xa_sc, Ya)
 acc_test = accuracy_score(Yt, final_model.predict(Xt_sc))
 print(f"\n=== Accuracy Finale sur Test Set : {acc_test:.4f} ===")
 
-## 📝 3. Explication Détaillée du Code
+📝 3. Explication Détaillée du Code
 
 Le script est structuré en 7 étapes logiques pour transformer les données brutes en un modèle fiable.
 
