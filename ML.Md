@@ -150,7 +150,7 @@ print(f"Accuracy Moyenne CV : {cv_scores.mean():.4f} (+/- {cv_scores.std():.4f})
 final_model.fit(Xa_sc, Ya)
 acc_test = accuracy_score(Yt, final_model.predict(Xt_sc))
 print(f"\n=== Accuracy Finale sur Test Set : {acc_test:.4f} ===")
-
+'''
 
  * Label Encoding : Les colonnes textuelles (ex: "Male", "Female") sont converties en chiffres (0, 1).
 Étape 4 : Division des Données (Splitting)
