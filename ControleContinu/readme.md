@@ -1,6 +1,6 @@
 # Rapport Scientifique : Détection Proactive de Phishing par Machine Learning
 
-**Auteur :** [Votre Nom]
+**Auteur :** Youssef abqari
 **Date :** Décembre 2025
 **Module :** Data Science & Machine Learning
 **Thématique :** Cybersécurité & Détection d'Intrusion
@@ -51,7 +51,7 @@ Nous avons utilisé le *Phishing Domain Detection Dataset* (Source : Kaggle/Mich
 ### 3.1 Analyse Exploratoire (EDA)
 [cite_start]L'analyse des corrélations a permis d'identifier les variables les plus discriminantes[cite: 33, 43]:
 
-![Insérer ici la Heatmap générée par le code]
+!<img src="heatmap.png" style="height:464px;margin-right:432px"/>
 *Figure 1 : Matrice de corrélation des 10 variables les plus influentes.*
 
 **Interprétation :**
@@ -63,18 +63,17 @@ Les modèles ont été évalués sur un jeu de test (20% du dataset) après un e
 
 | Modèle | Accuracy | ROC-AUC |
 | :--- | :--- | :--- |
-| **Régression Logistique** | ~XX.XX% | 0.XX |
-| **Random Forest** | **~XX.XX%** | **0.XX** |
-| **Gradient Boosting** | ~XX.XX% | 0.XX |
+| **Régression Logistique** | ~0.9318% | 0.9275 |
+| **Random Forest** | **~0.9688%** | **0.9667** |
+| **Gradient Boosting** | ~0.9532% | 0.9487 |
 
-*(Remplacez les XX par vos résultats)*
 
 Nous constatons que les modèles non-linéaires (**Random Forest** et **Gradient Boosting**) surperforment largement la Régression Logistique. Le **Random Forest** a été retenu pour l'optimisation finale en raison de son excellent compromis entre performance et stabilité.
 
 ### 3.3 Analyse des Erreurs (Matrice de Confusion)
 L'analyse de la matrice de confusion du modèle optimisé montre la répartition suivante :
 
-![Insérer ici la Matrice de Confusion générée par le code]
+<img src="Confusion.png" style="height:464px;margin-right:432px"/>
 *Figure 2 : Matrice de confusion du modèle Random Forest optimisé.*
 
 **Discussion :**
