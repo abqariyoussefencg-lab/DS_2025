@@ -10,7 +10,7 @@
 ## 1. Introduction
 
 ### Contexte
-La cybercriminalité, et plus particulièrement le phishing (hameçonnage), représente une menace économique et sécuritaire majeure. [cite_start]Les méthodes de défense traditionnelles reposent souvent sur des "listes noires" (blacklists), une approche réactive qui ne permet de bloquer un site qu'après qu'il a été signalé ou a fait des victimes[cite: 41].
+La cybercriminalité, et plus particulièrement le phishing (hameçonnage), représente une menace économique et sécuritaire majeure. Les méthodes de défense traditionnelles reposent souvent sur des "listes noires" (blacklists), une approche réactive qui ne permet de bloquer un site qu'après qu'il a été signalé ou a fait des victimes
 
 ### Problématique
 Comment anticiper la menace en détectant un site de phishing uniquement à partir des caractéristiques techniques de son URL, avant même l'analyse de son contenu ? Il s'agit d'un problème de **classification binaire** supervisée où nous cherchons à distinguer deux classes :
@@ -18,7 +18,7 @@ Comment anticiper la menace en détectant un site de phishing uniquement à part
 * **1 :** URL de Phishing
 
 ### Objectifs
-L'objectif de ce projet est de construire un modèle prédictif capable de classifier une URL avec une précision (Accuracy) satisfaisante, tout en minimisant les faux négatifs (sites dangereux non détectés). [cite_start]Nous suivrons le cycle de vie complet d'un projet de Machine Learning : du nettoyage des données à l'optimisation des hyperparamètres[cite: 7, 41].
+L'objectif de ce projet est de construire un modèle prédictif capable de classifier une URL avec une précision (Accuracy) satisfaisante, tout en minimisant les faux négatifs (sites dangereux non détectés). Nous suivrons le cycle de vie complet d'un projet de Machine Learning : du nettoyage des données à l'optimisation des hyperparamètres.
 
 ---
 
@@ -28,10 +28,10 @@ L'objectif de ce projet est de construire un modèle prédictif capable de class
 Nous avons utilisé le *Phishing Domain Detection Dataset* (Source : Kaggle/MichelleVP).
 * **Description :** Le jeu de données contient des caractéristiques lexicales (longueur, caractères spéciaux) et techniques extraites des URLs.
 * **Volume :** Environ 80 000 instances.
-* [cite_start]**Target :** Variable binaire équilibrée (50% Phishing / 50% Légitime), ce qui facilite l'apprentissage[cite: 22].
+* **Target :** Variable binaire équilibrée (50% Phishing / 50% Légitime), ce qui facilite l'apprentissage.
 
 ### 2.2 Pré-traitement (Preprocessing)
-[cite_start]Avant la modélisation, les données ont subi un traitement rigoureux pour garantir la qualité des prédictions [cite: 42, 26-30] :
+Avant la modélisation, les données ont subi un traitement rigoureux pour garantir la qualité des prédictions  :
 
 1.  **Nettoyage des doublons :** Suppression des lignes identiques pour éviter le biais de sur-apprentissage.
 2.  **Gestion de la Target :** Encodage de la variable cible (si textuelle) en format numérique (0/1).
@@ -39,7 +39,7 @@ Nous avons utilisé le *Phishing Domain Detection Dataset* (Source : Kaggle/Mich
 4.  **Standardisation (Scaling) :** Application du `StandardScaler` ($\mu=0, \sigma=1$). Cette étape est justifiée par l'hétérogénéité des échelles de nos variables (ex: *longueur de l'URL* vs *présence binaire d'une IP*), essentielle pour des algorithmes comme la Régression Logistique.
 
 ### 2.3 Choix des Algorithmes
-[cite_start]Nous avons comparé trois familles d'algorithmes[cite: 37]:
+Nous avons comparé trois familles d'algorithmes:
 * **Régression Logistique :** Modèle linéaire simple, utilisé comme *baseline*.
 * **Random Forest :** Méthode d'ensemble (Bagging) robuste aux données bruitées et capable de capturer des relations non-linéaires.
 * **Gradient Boosting :** Méthode de boosting séquentielle, souvent plus précise mais plus coûteuse en calcul.
@@ -49,9 +49,10 @@ Nous avons utilisé le *Phishing Domain Detection Dataset* (Source : Kaggle/Mich
 ## 3. Résultats & Discussion
 
 ### 3.1 Analyse Exploratoire (EDA)
-[cite_start]L'analyse des corrélations a permis d'identifier les variables les plus discriminantes[cite: 33, 43]:
+L'analyse des corrélations a permis d'identifier les variables les plus discriminantes:
 
 !<img src="heatmap.png" style="height:464px;margin-right:432px"/>
+
 *Figure 1 : Matrice de corrélation des 10 variables les plus influentes.*
 
 **Interprétation :**
@@ -73,7 +74,8 @@ Nous constatons que les modèles non-linéaires (**Random Forest** et **Gradient
 ### 3.3 Analyse des Erreurs (Matrice de Confusion)
 L'analyse de la matrice de confusion du modèle optimisé montre la répartition suivante :
 
-<img src="Confusion.png" style="height:464px;margin-right:432px"/>
+<img src="confusion.PNG" style="height:464px;margin-right:432px"/>
+
 *Figure 2 : Matrice de confusion du modèle Random Forest optimisé.*
 
 **Discussion :**
